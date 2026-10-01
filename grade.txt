@@ -1,0 +1,96 @@
+Student: Jose-Godinez-Contreras
+
+================================================================================
+GRADING REPORT — COMP 371 PROJECT 2A
+================================================================================
+
+### 1. Project Structure — 0.40 / 0.50
+
+Evidence:
+* Source code in src/main/scala/main.scala, build.sbt, scala.sbt, .gitignore, .scalafmt.conf, .github/workflows/scala.yml, Doc/
+* Dependencies configured in build.sbt: sbt-native-packager 1.10.4, commons-collections4 4.5.0
+
+Deductions:
+* (-0.05) Requirement: Documentation / Layout. Missing root README.md.
+* (-0.05) Requirement: Configuration / Clean repository. Missing project/build.properties in version control (ignored in .gitignore).
+
+Points Awarded: 0.40 / 0.50
+
+### 2. Correctness — 1.00 / 1.00
+
+Evidence:
+* sbt test: PASS (compilation clean)
+* sbt stage: PASS (generated target/universal/stage/bin/main)
+* Empty input (printf "" | ...): exits 0 with no output
+* Nonempty input: produces correct sliding-window output matching reference format
+* Default capacity: correctly defaults to 10
+* Custom capacity: maintains running window of specified size
+* Argument handling:
+  - Exits 2 on multiple arguments with usage message
+  - Exits 4 on non-integer or non-positive arguments with "argument should be a natural number"
+* Broken pipe handling: cleanly terminates on broken stdout pipe with exit code 1 via System.out.checkError
+
+Deductions:
+* None
+
+Points Awarded: 1.00 / 1.00
+
+### 3. Scalability — 0.50 / 0.50
+
+Evidence:
+* Uses CircularFifoQueue[String](lastNWords) with fixed capacity, evicting the oldest element on overflow
+* Scanner processes input tokens incrementally from System.in without accumulating past tokens
+* Memory is bounded to O(capacity) regardless of stream length
+* Scalability stream test: 500,000 words streamed cleanly through the executable with exit code 0 and stable memory
+
+Deductions:
+* None
+
+Points Awarded: 0.50 / 0.50
+
+### 4. Manual Testing — 0.15 / 0.50
+
+Evidence:
+* Doc/Screenshot 2026-09-30 at 11.08.17 AM.png demonstrates nonempty input test (./target/universal/stage/bin/main 3 with words w1 through w6)
+* Doc/Screenshot 2026-09-30 at 11.18.56 AM.png duplicate screenshot of nonempty input test
+
+Deductions:
+* (-0.15) Requirement: Empty input testing evidence. Missing screenshot demonstrating immediate EOF / Ctrl-D with empty input.
+* (-0.20) Requirement: Scalability evidence. Missing required htop / scalability screenshots demonstrating stable memory over time under streaming load.
+
+Points Awarded: 0.15 / 0.50
+
+### 5. AI Disclosure / Affidavit — 0.35 / 0.50
+
+Evidence:
+* Doc/chat-transcript.pdf: Multi-page exported chat transcript with Claude detailing project requirements, sbt setup, dependencies, and testing commands
+
+Deductions:
+* (-0.15) Requirement: AI disclosure / affidavit. Submitted raw chat transcript (Doc/chat-transcript.pdf) but missing formal affidavit / written disclosure narrative explaining tool usage, student authorship, and verification.
+
+Points Awarded: 0.35 / 0.50
+
+### Extra Credit — +0.00 / 0.50
+
+Evidence:
+* No automated unit tests implemented (src/test does not exist)
+
+Points Awarded: +0.00 / 0.50
+
+================================================================================
+FINAL SCORE
+================================================================================
+Base Score:   2.40 / 3.00
+Extra Credit: +0.00 / 0.50
+Total Score:  2.40 / 3.00
+
+--------------------------------------------------------------------------------
+STUDENT-FACING FEEDBACK
+--------------------------------------------------------------------------------
+Your Scala application correctly ports the Java reference implementation and passes all functional checks: packaging with sbt stage succeeds, argument validation properly returns exit codes 2 and 4, empty input exits silently, and stream processing with CircularFifoQueue maintains constant memory.
+
+To improve your submission:
+1. Documentation & Structure: Include a top-level README.md, track project/build.properties in Git, and use the standard lowercase directory name `doc/`.
+2. Manual Testing: Include all required screenshots in `doc/` — specifically, an immediate Ctrl-D / empty-input run and htop screenshots showing memory stability over time during the `yes | ...` scalability test.
+3. AI Disclosure: Supplement raw chat transcripts with a written disclosure narrative/affidavit summarizing how AI was utilized and how you verified the generated code.
+4. Architecture & Unit Tests: Decouple the sliding queue logic from console I/O into an independent component and implement automated unit tests (e.g., using ScalaTest or MUnit) to earn extra credit.
